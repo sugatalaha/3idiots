@@ -234,11 +234,176 @@
 
 // export default MessageInput;
 
+// import React, { useEffect, useRef, useState } from "react";
+// import { useChatStore } from "../store/useChatStore";
+// import { Image, Send, X } from "lucide-react";
+// import { axiosInstance } from "../lib/axios";
+// import { useAuthStore } from "../store/useAuthStore.js";
+
+// const MessageInput = ({ messages }) => {
+//   const [text, setText] = useState("");
+//   const [imagePreview, setImagePreview] = useState(null);
+//   const [summary, setSummary] = useState(null);
+//   const fileInputRef = useRef(null);
+//   const { sendMessage, selectedUser } = useChatStore();
+
+//   useEffect(()=>
+// {
+//     setSummary("");
+// },[selectedUser._id]);
+
+//   const handleImageChange = (e) => {
+//     const file = e.target.files[0];
+//     if (!file.type.startsWith("image/")) {
+//       alert("Please select an image file");
+//       return;
+//     }
+
+//     const reader = new FileReader();
+//     reader.onloadend = () => {
+//       setImagePreview(reader.result);
+//     };
+//     reader.readAsDataURL(file);
+//   };
+
+//   const removeImage = () => {
+//     setImagePreview(null);
+//     if (fileInputRef.current) fileInputRef.current.value = "";
+//   };
+
+//   const handleSendMessage = async (e) => {
+//     e.preventDefault();
+//     if (!text.trim() && !imagePreview) return;
+
+//     try {
+//       if (selectedUser) {
+//         await sendMessage({
+//           text: text.trim(),
+//           image: imagePreview,
+//         });
+//       }
+
+//       setText("");
+//       setImagePreview(null);
+//       if (fileInputRef.current) fileInputRef.current.value = "";
+//     } catch (error) {
+//       console.error("Failed to send message:", error);
+//     }
+//   };
+
+//   // Function to get messages from the last 12 hours
+//   const getLast12HoursMessages = () => {
+//     const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
+    
+//     return messages
+//       .filter((msg) => new Date(msg.createdAt) >= twelveHoursAgo)
+//       .map((msg) => `${msg.senderId.role}: ${msg.text}`)
+//       .join(" ");
+//   };
+
+//   // Function to fetch summary
+//   const handleSummarize = async () => {
+//     const chatHistory = getLast12HoursMessages();
+//     if (!chatHistory) return alert("No messages in the last 12 hours to summarize.");
+
+//     try {
+//       const { data } = await axiosInstance.post(
+//         "/summarize/",
+//         { chatHistory },
+//         { headers: { "Content-Type": "application/json" } }
+//       );
+//       console.log(data);
+//       setSummary(data.summary);
+
+//       console.log(summary);
+//     } catch (error) {
+//       console.error("Error fetching summary:", error);
+//       alert("Failed to fetch summary.");
+//     }
+//   };
+
+//   return (
+//     <div className="p-3 border-top bg-light">
+//       {/* Image Preview */}
+//       {imagePreview && (
+//         <div className="mb-3 d-flex align-items-center gap-2">
+//           <div className="position-relative">
+//             <img
+//               src={imagePreview}
+//               alt="Preview"
+//               className="border rounded"
+//               style={{ maxWidth: "80px", maxHeight: "80px", objectFit: "cover" }}
+//             />
+//             <button
+//               onClick={removeImage}
+//               className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+//               type="button"
+//             >
+//               <X size={14} />
+//             </button>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* Message Input */}
+//       <form onSubmit={handleSendMessage} className="d-flex align-items-center gap-2">
+//         <div className="input-group">
+//           <input
+//             type="text"
+//             className="form-control"
+//             placeholder="Type a message..."
+//             value={text}
+//             onChange={(e) => setText(e.target.value)}
+//           />
+//           <input
+//             type="file"
+//             accept="image/*"
+//             className="d-none"
+//             ref={fileInputRef}
+//             onChange={handleImageChange}
+//           />
+//           <button
+//             type="button"
+//             className="btn btn-outline-secondary"
+//             onClick={() => fileInputRef.current?.click()}
+//           >
+//             <Image size={20} />
+//           </button>
+//           <button
+//             type="button"
+//             className="btn btn-outline-secondary"
+//             onClick={handleSummarize}
+//           >
+//             📄 Summarize
+//           </button>
+//         </div>
+//         <button type="submit" className="btn btn-primary" disabled={!text.trim() && !imagePreview}>
+//           <Send size={20} />
+//         </button>
+//         <button type="submit" className="btn btn-primary" disabled={!text.trim() && !imagePreview}>
+//           <Send size={20} />
+//         </button>
+//       </form>
+
+//       {/* Summary Display */}
+//       {summary && (
+//         <div className="alert alert-info mt-3">
+//           <strong>Summary:</strong> {summary}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default MessageInput;
+
 import React, { useEffect, useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
-import { Image, Send, X } from "lucide-react";
+import { Image, Send, X, Share } from "lucide-react"; // Added Share icon
 import { axiosInstance } from "../lib/axios";
 import { useAuthStore } from "../store/useAuthStore.js";
+import Chat from "../../../backend/src/models/chat.model.js";
+
 
 const MessageInput = ({ messages }) => {
   const [text, setText] = useState("");
@@ -246,11 +411,11 @@ const MessageInput = ({ messages }) => {
   const [summary, setSummary] = useState(null);
   const fileInputRef = useRef(null);
   const { sendMessage, selectedUser } = useChatStore();
+  
 
-  useEffect(()=>
-{
+  useEffect(() => {
     setSummary("");
-},[selectedUser._id]);
+  }, [selectedUser._id]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -294,7 +459,7 @@ const MessageInput = ({ messages }) => {
   // Function to get messages from the last 12 hours
   const getLast12HoursMessages = () => {
     const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
-    
+
     return messages
       .filter((msg) => new Date(msg.createdAt) >= twelveHoursAgo)
       .map((msg) => `${msg.senderId.role}: ${msg.text}`)
@@ -314,13 +479,40 @@ const MessageInput = ({ messages }) => {
       );
       console.log(data);
       setSummary(data.summary);
-
-      console.log(summary);
     } catch (error) {
       console.error("Error fetching summary:", error);
       alert("Failed to fetch summary.");
     }
   };
+
+  // Function to forward messages
+  const handleForwardMessage = async () => {
+    try {
+      if (!selectedUser) {
+        alert("No user selected to forward the message.");
+        return;
+      }
+  
+      const chatId = await Chat.findOne() // Ensure chatId is stored in selectedUser
+      const forwardedUserId = prompt("Enter the User ID to forward the chat:"); // Get user input
+  
+      if (!forwardedUserId) {
+        alert("No User ID entered.");
+        return;
+      }
+  
+      const response = await axiosInstance.post("/api/chat/forward", {
+        chatId,
+        forwardedUserId,
+      });
+  
+      alert(response.data.message);
+    } catch (error) {
+      console.error("Error forwarding message:", error);
+      alert(error.response?.data?.message || "Failed to forward message.");
+    }
+  };
+  
 
   return (
     <div className="p-3 border-top bg-light">
@@ -380,6 +572,9 @@ const MessageInput = ({ messages }) => {
         <button type="submit" className="btn btn-primary" disabled={!text.trim() && !imagePreview}>
           <Send size={20} />
         </button>
+        <button type="button" className="btn btn-secondary" onClick={handleForwardMessage}>
+          <Share size={20} />
+        </button>
       </form>
 
       {/* Summary Display */}
@@ -393,3 +588,4 @@ const MessageInput = ({ messages }) => {
 };
 
 export default MessageInput;
+

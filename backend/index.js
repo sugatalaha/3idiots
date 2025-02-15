@@ -7,6 +7,7 @@ import authRoutes from './src/routes/auth.route.js';
 import messageRoutes from './src/routes/message.route.js';
 import searchRoutes from './src/routes/search.route.js';
 import summarizeRoutes from './src/routes/sumarize.route.js';
+import forwardRoutes from './src/routes/forwardmsg.route.js';
 import { app,server } from './src/lib/socket.js';
 
 
@@ -27,6 +28,7 @@ app.use('/api/auth',authRoutes);
 app.use('/api/messages',messageRoutes);
 app.use('/api/search',searchRoutes);
 app.use('/api/summarize',summarizeRoutes);
+app.use('/api/forwardmsg',forwardRoutes);
 
 
 server.listen(PORT, ()=>{

@@ -8,6 +8,13 @@ const chatSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+
+    forwarded_users: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
   },
   {
     timestamps: true,
