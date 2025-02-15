@@ -89,19 +89,91 @@
 
 // export default Sidebar;
 
+// import React, { useEffect, useState } from "react";
+// import { useChatStore } from "../store/useChatStore.js";
+// import SidebarSkeleton from "./skeletons/SidebarSkeleton";
+// import { Users } from "lucide-react";
+// import { useAuthStore } from "../store/useAuthStore.js";
+// import Searchbar from "../components/SearchBar.jsx";
+
+// const Sidebar = () => {
+//   const { users, selectedUser, getUsers, setSelectedUser, isUserLoading } = useChatStore();
+//   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+//   const { authUser, onlineUsers } = useAuthStore();
+
+//   useEffect(() => {
+//     getUsers();
+//   }, [getUsers]);
+
+  
+
+//   const displayedUsers = showOnlineOnly ? users.filter(user => onlineUsers.includes(user._id)) : users;
+
+//   if (isUserLoading) return <SidebarSkeleton />;
+
+//   return (
+//     <aside className="p-3 h-100 bg-white d-flex flex-column border-end">
+//       <div className="d-flex align-items-center justify-between mb-3">
+//         <Users size={24} className="me-2" />
+//         <span className="fw-bold">{authUser.role === "Patient" ? "Doctors" : "Patients"}</span>
+//       </div>
+
+//       <div className="form-check mb-3">
+//         <input
+//           type="checkbox"
+//           className="form-check-input"
+//           checked={showOnlineOnly}
+//           onChange={(e) => setShowOnlineOnly(e.target.checked)}
+//         />
+//         <label className="form-check-label">Show online only</label>
+//       </div>
+
+//       {/* User List */}
+//       <div className="overflow-auto flex-grow-1">
+//         {displayedUsers.map((user) => (
+//           <button
+//             key={user._id}
+//             onClick={() => setSelectedUser(user)}
+//             className={`d-flex align-items-center p-2 rounded border-0 w-100 text-start ${
+//               selectedUser?._id === user._id ? "bg-primary text-black" : "bg-white"
+//             }`}
+//           >
+//             <img src={user.profilePic || "/avatar.png"} alt={user.name} className="rounded-circle me-2" style={{ width: "40px", height: "40px" }} />
+//             <div>
+//               <div className="fw-medium">{user.name}</div>
+//               <div className="small text-muted">{onlineUsers.includes(user._id) ? "Online" : "Offline"}</div>
+//             </div>
+//           </button>
+//         ))}
+//       </div>
+//     </aside>
+//   );
+// };
+
+// export default Sidebar;
+
 import React, { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore.js";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 import { Users } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore.js";
+import Searchbar from "../components/SearchBar.jsx";
 
 const Sidebar = () => {
   const { users, selectedUser, getUsers, setSelectedUser, isUserLoading } = useChatStore();
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
   const { authUser, onlineUsers } = useAuthStore();
+  const [isPatient, setIsPatient] = useState(false);
 
   useEffect(() => {
     getUsers();
+
+    // Check if the user is a patient
+    const user = authUser;
+    console.log(user);
+    if (user && user.role === "Patient") {
+      setIsPatient(true);
+    }
   }, [getUsers]);
 
   const displayedUsers = showOnlineOnly ? users.filter(user => onlineUsers.includes(user._id)) : users;
@@ -114,6 +186,9 @@ const Sidebar = () => {
         <Users size={24} className="me-2" />
         <span className="fw-bold">{authUser.role === "Patient" ? "Doctors" : "Patients"}</span>
       </div>
+
+      {/* Show Search Bar for Patients */}
+      {isPatient && <Searchbar />}
 
       <div className="form-check mb-3">
         <input
@@ -135,7 +210,12 @@ const Sidebar = () => {
               selectedUser?._id === user._id ? "bg-primary text-black" : "bg-white"
             }`}
           >
-            <img src={user.profilePic || "/avatar.png"} alt={user.name} className="rounded-circle me-2" style={{ width: "40px", height: "40px" }} />
+            <img
+              src={user.profilePic || "/avatar.png"}
+              alt={user.name}
+              className="rounded-circle me-2"
+              style={{ width: "40px", height: "40px" }}
+            />
             <div>
               <div className="fw-medium">{user.name}</div>
               <div className="small text-muted">{onlineUsers.includes(user._id) ? "Online" : "Offline"}</div>
@@ -148,4 +228,5 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
 

@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema(
   {
+    chatId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Chat", // Reference to the Chat model
+        required: true,
+      },
     senderId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // Can reference either Doctor or Patient
