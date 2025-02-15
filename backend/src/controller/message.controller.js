@@ -6,6 +6,7 @@ import User from "../models/user.model.js";
 const getUsersForSidebar = async (req, res) => {
   try {
     const loggedInUser = await User.findById(req.user._id);
+    //console.log(loggedInUser)
 
     if (!loggedInUser) {
       return res.status(404).json({ message: "User not found" });
@@ -17,7 +18,8 @@ const getUsersForSidebar = async (req, res) => {
       role: loggedInUser.role === "Doctor" ? "Patient" : "Doctor",
     }).select("-password");
 
-    res.status(200).json(filteredUsers);
+    console.log(filteredUsers);
+    return res.status(200).json(filteredUsers);
   } catch (error) {
     console.log("getUsersForSidebar error: " + error);
     return res.status(500).json({ message: "Internal Server Error" });

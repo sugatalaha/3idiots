@@ -4,12 +4,12 @@ const messageSchema = new mongoose.Schema(
   {
     senderId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: ["Doctor", "Patient"], // Can reference either Doctor or Patient
+      ref: "User", // Can reference either Doctor or Patient
       required: true,
     },
     receiverId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: ["Doctor", "Patient"], // Can reference either Doctor or Patient
+      ref: "User", // Can reference either Doctor or Patient
       required: true,
     },
     text: {
