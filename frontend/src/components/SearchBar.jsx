@@ -1,8 +1,11 @@
 import React, { useState, useCallback } from "react";
 import {axiosInstance} from "../lib/axios.js";
 import debounce from "lodash.debounce";
+import { useChatStore } from "../store/useChatStore.js";
+
 
 const Searchbar = () => {
+  const { users, selectedUser, getUsers, setSelectedUser, isUserLoading } = useChatStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -55,6 +58,7 @@ const Searchbar = () => {
         userId: doctorId,
       });
       console.log("Chat created or retrieved:", data);
+      await getUsers();
       // Handle UI navigation to chat
     } catch (error) {
       console.error("Error creating chat:", error);

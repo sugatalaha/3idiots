@@ -142,6 +142,81 @@
 
 // export default ChatContainer;
 
+// import React, { useEffect, useRef } from "react";
+// import { useChatStore } from "../store/useChatStore";
+// import ChatHeader from "./ChatHeader";
+// import MessageInput from "./MessageInput";
+// import { useAuthStore } from "../store/useAuthStore";
+// import { formatMessageTime } from "../lib/utils";
+
+// const ChatContainer = () => {
+//   const { selectedUser, messages, getMessages, isMessageLoading,subscribeToMessages,unsubscribeFromMessages } = useChatStore();
+//   const { authUser } = useAuthStore();
+//   const messageEndRef = useRef(null);
+
+//   useEffect(() => {
+//     if (selectedUser?._id) {
+//       getMessages(selectedUser._id);
+//     }
+//   }, [selectedUser?._id]);
+
+// //   useEffect(() => {
+// //     if (messageEndRef.current) {
+// //       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+// //     }
+// //   }, [messages]);
+// useEffect(() => {
+    
+//     if (selectedUser?._id) {
+//       getMessages(selectedUser._id); // Fetch user-specific messages
+   
+  
+//     subscribeToMessages();
+    
+//     return () => unsubscribeFromMessages();
+//     }
+//   }, [selectedUser?._id, subscribeToMessages, unsubscribeFromMessages]);
+
+//   return (
+//     <div className="d-flex flex-column h-100 w-100">
+//       <ChatHeader />
+
+//       {/* Messages Section */}
+//       <div className="flex-grow-1 overflow-auto p-3 d-flex flex-column">
+//         {messages.map((message) => (
+//           <div key={message._id} ref={messageEndRef} 
+//                className={`d-flex mb-3 ${message.senderId === authUser._id ? "justify-content-end" : "justify-content-start"}`}>
+            
+//             {/* User Avatar */}
+//             <div className="me-2">
+//               <img
+//                 src={message.senderId === authUser._id ? authUser.profilePic || "/avatar.png" : selectedUser?.profilePic || "/avatar.png"}
+//                 alt="Profile"
+//                 className="rounded-circle border"
+//                 style={{ width: "40px", height: "40px" }}
+//               />
+//             </div>
+
+//             {/* Message Bubble */}
+//             <div className={`p-2 rounded-3 ${message.senderId === authUser._id ? "bg-primary text-white" : "bg-light border"} shadow-sm`} 
+//                  style={{ maxWidth: "75%", wordBreak: "break-word" }}>
+//               {message.image && (
+//                 <img src={message.image} alt="Attachment" className="img-fluid rounded mb-2" style={{ maxWidth: "250px" }} />
+//               )}
+//               <p className="mb-1">{message.text}</p>
+//               <small className="text-muted d-block text-end">{formatMessageTime(message.createdAt)}</small>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+
+//       <MessageInput />
+//     </div>
+//   );
+// };
+
+// export default ChatContainer;
+
 import React, { useEffect, useRef } from "react";
 import { useChatStore } from "../store/useChatStore";
 import ChatHeader from "./ChatHeader";
@@ -150,15 +225,17 @@ import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
-  const { selectedUser, messages, getMessages, isMessageLoading } = useChatStore();
+  const { selectedUser, messages, getMessages, isMessageLoading, subscribeToMessages, unsubscribeFromMessages } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
 
   useEffect(() => {
     if (selectedUser?._id) {
       getMessages(selectedUser._id);
+      subscribeToMessages();
+      return () => unsubscribeFromMessages();
     }
-  }, [selectedUser?._id]);
+  }, [selectedUser?._id, subscribeToMessages, unsubscribeFromMessages]);
 
   useEffect(() => {
     if (messageEndRef.current) {
@@ -167,13 +244,14 @@ const ChatContainer = () => {
   }, [messages]);
 
   return (
-    <div className="d-flex flex-column h-100 w-100">
+    <div className="d-flex flex-column min-vh-100 w-100 bg-white">
+      {/* Chat Header */}
       <ChatHeader />
 
       {/* Messages Section */}
       <div className="flex-grow-1 overflow-auto p-3 d-flex flex-column">
-        {messages.map((message) => (
-          <div key={message._id} ref={messageEndRef} 
+        {messages.map((message,index) => (
+          <div key={index} ref={messageEndRef} 
                className={`d-flex mb-3 ${message.senderId === authUser._id ? "justify-content-end" : "justify-content-start"}`}>
             
             {/* User Avatar */}
@@ -188,9 +266,9 @@ const ChatContainer = () => {
 
             {/* Message Bubble */}
             <div className={`p-2 rounded-3 ${message.senderId === authUser._id ? "bg-primary text-white" : "bg-light border"} shadow-sm`} 
-                 style={{ maxWidth: "75%", wordBreak: "break-word" }}>
+                 style={{ maxWidth: "75%", overflowWrap: "break-word", wordBreak: "break-word" }}>
               {message.image && (
-                <img src={message.image} alt="Attachment" className="img-fluid rounded mb-2" style={{ maxWidth: "250px" }} />
+                <img src={message.image} alt="Attachment" className="img-fluid rounded mb-2" style={{ maxWidth: "250px", height: "auto" }} />
               )}
               <p className="mb-1">{message.text}</p>
               <small className="text-muted d-block text-end">{formatMessageTime(message.createdAt)}</small>
@@ -199,9 +277,11 @@ const ChatContainer = () => {
         ))}
       </div>
 
-      <MessageInput />
+      {/* Message Input */}
+      <MessageInput messages={messages}/>
     </div>
   );
 };
 
 export default ChatContainer;
+
