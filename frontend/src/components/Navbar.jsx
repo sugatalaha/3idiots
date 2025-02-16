@@ -44,10 +44,75 @@
 
 // export default Navbar
 
+// import React from "react";
+// import { Link } from "react-router-dom";
+// import { MessageSquare, LogOut, User } from "lucide-react";
+// import { useAuthStore } from "../store/useAuthStore";
+
+// const Navbar = () => {
+//   const { authUser, logout } = useAuthStore();
+
+//   return (
+//     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+//       <div className="container-fluid">
+//         {/* Logo and Brand */}
+//         <Link to="/" className="navbar-brand d-flex align-items-center">
+//           <div className="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+//             <MessageSquare className="text-primary" size={20} />
+//           </div>
+//           <h1 className="h5 mb-0 fw-bold">Be Healthy</h1>
+//         </Link>
+
+//         {/* Navbar Toggler for Mobile */}
+//         <button
+//           className="navbar-toggler"
+//           type="button"
+//           data-bs-toggle="collapse"
+//           data-bs-target="#navbarNav"
+//           aria-controls="navbarNav"
+//           aria-expanded="false"
+//           aria-label="Toggle navigation"
+//         >
+//           <span className="navbar-toggler-icon"></span>
+//         </button>
+
+//         {/* Navigation Items */}
+//         <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
+//           <ul className="navbar-nav">
+//             {authUser && (
+//               <>
+//                 {/* Profile Link */}
+//                 <li className="nav-item">
+//                   <Link to="/profile" className="btn btn-outline-primary btn-sm me-2">
+//                     <User size={18} className="me-1" />
+//                     <span className="d-none d-sm-inline">Profile</span>
+//                   </Link>
+//                 </li>
+
+//                 {/* Logout Button */}
+//                 <li className="nav-item">
+//                   <button className="btn btn-danger btn-sm" onClick={logout}>
+//                     <LogOut size={18} className="me-1" />
+//                     <span className="d-none d-sm-inline">Logout</span>
+//                   </button>
+//                 </li>
+//               </>
+//             )}
+//           </ul>
+//         </div>
+//       </div>
+//     </nav>
+//   );
+// };
+
+// export default Navbar;
+
 import React from "react";
 import { Link } from "react-router-dom";
-import { MessageSquare, LogOut, User } from "lucide-react";
+import { HeartPulse, LogOut, User } from "lucide-react"; // Changed icon to Heartbeat
 import { useAuthStore } from "../store/useAuthStore";
+
+
 
 const Navbar = () => {
   const { authUser, logout } = useAuthStore();
@@ -58,7 +123,7 @@ const Navbar = () => {
         {/* Logo and Brand */}
         <Link to="/" className="navbar-brand d-flex align-items-center">
           <div className="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle p-2 me-2">
-            <MessageSquare className="text-primary" size={20} />
+            <HeartPulse className="text-primary" size={20} /> {/* Updated icon */}
           </div>
           <h1 className="h5 mb-0 fw-bold">Be Healthy</h1>
         </Link>
@@ -106,4 +171,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

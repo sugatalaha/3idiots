@@ -288,6 +288,197 @@
 
 // export default ChatContainer;
 
+// import React, { useEffect, useRef } from "react";
+// import { useChatStore } from "../store/useChatStore";
+// import ChatHeader from "./ChatHeader";
+// import MessageInput from "./MessageInput";
+// import { useAuthStore } from "../store/useAuthStore";
+// import { formatMessageTime } from "../lib/utils";
+
+// const ChatContainer = () => {
+//   const { selectedUser, messages, getMessages, isMessageLoading, subscribeToMessages, unsubscribeFromMessages } = useChatStore();
+//   const { authUser } = useAuthStore();
+//   const messageEndRef = useRef(null);
+
+//   useEffect(() => {
+//     if (selectedUser?._id) {
+//       getMessages(selectedUser._id);
+//       subscribeToMessages();
+//       return () => unsubscribeFromMessages();
+//     }
+//   }, [selectedUser?._id, subscribeToMessages, unsubscribeFromMessages,messages]);
+
+//   useEffect(() => {
+//     if (messageEndRef.current) {
+//       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+//     }
+//   }, [messages]);
+
+//   return (
+//     <div className="d-flex flex-column min-vh-100 w-100 bg-white">
+//       {/* Chat Header */}
+//       <ChatHeader />
+
+//       {/* Messages Section */}
+//       <div className="flex-grow-1 overflow-auto p-3 d-flex flex-column">
+//         {messages.map((message, index) => {
+//           const isSentByUser = message.senderId._id === authUser._id;
+
+//           return (
+//             <div
+//               key={index}
+//               ref={messageEndRef}
+//               className={`d-flex mb-3 ${isSentByUser ? "justify-content-end" : "justify-content-start"}`}
+//             >
+//               {/* Avatar for received messages */}
+//               {!isSentByUser && (
+//                 <div className="me-2">
+//                   <img
+//                     src={selectedUser?.profilePic || "/avatar.png"}
+//                     alt="Profile"
+//                     className="rounded-circle border"
+//                     style={{ width: "40px", height: "40px" }}
+//                   />
+//                 </div>
+//               )}
+
+//               {/* Message Bubble */}
+//               <div
+//                 className={`p-2 rounded-3 shadow-sm ${isSentByUser ? "justify-content-end" : "justify-content-start"}`}
+//                 style={{ maxWidth: "75%", overflowWrap: "break-word", wordBreak: "break-word" }}
+//               >
+//                 {message.image && (
+//                   <img
+//                     src={message.image}
+//                     alt="Attachment"
+//                     className="img-fluid rounded mb-2"
+//                     style={{ maxWidth: "250px", height: "auto" }}
+//                   />
+//                 )}
+//                 <p className="mb-1">{message.text}</p>
+//                 <small className="text-muted d-block text-end">{formatMessageTime(message.createdAt)}</small>
+//               </div>
+
+//               {/* Avatar for sent messages */}
+//               {isSentByUser && (
+//                 <div className="ms-2">
+//                   <img
+//                     src={authUser.profilePic || "/avatar.png"}
+//                     alt="Profile"
+//                     className="rounded-circle border"
+//                     style={{ width: "40px", height: "40px" }}
+//                   />
+//                 </div>
+//               )}
+//             </div>
+//           );
+//         })}
+//       </div>
+
+//       {/* Message Input */}
+//       <MessageInput messages={messages} />
+//     </div>
+//   );
+// };
+
+// export default ChatContainer;
+
+
+// import React, { useEffect, useRef } from "react";
+// import { useChatStore } from "../store/useChatStore";
+// import ChatHeader from "./ChatHeader";
+// import MessageInput from "./MessageInput";
+// import { useAuthStore } from "../store/useAuthStore";
+// import { formatMessageTime } from "../lib/utils";
+// import "./styles.css"; // Import styles
+
+// const ChatContainer = () => {
+//   const { selectedUser, messages, getMessages, isMessageLoading, subscribeToMessages, unsubscribeFromMessages } = useChatStore();
+//   const { authUser } = useAuthStore();
+//   const messageEndRef = useRef(null);
+
+//   useEffect(() => {
+//     if (selectedUser?._id) {
+//       getMessages(selectedUser._id);
+//       subscribeToMessages();
+//       return () => unsubscribeFromMessages();
+//     }
+//   }, [selectedUser?._id, subscribeToMessages, unsubscribeFromMessages, messages]);
+
+//   useEffect(() => {
+//     if (messageEndRef.current) {
+//       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+//     }
+//   }, [messages]);
+
+//   return (
+//     <div className="d-flex flex-column min-vh-100 w-100 bg-white">
+//       {/* Chat Header */}
+//       <ChatHeader />
+
+//       {/* Messages Section */}
+//       <div className="chat-container flex-grow-1 overflow-auto p-3 d-flex flex-column">
+//         {messages.map((message, index) => {
+//           const isSentByUser = message.senderId._id === authUser._id;
+
+//           return (
+//             <div
+//               key={index}
+//               ref={messageEndRef}
+//               className={`d-flex mb-3 ${isSentByUser ? "justify-content-end" : "justify-content-start"}`}
+//             >
+//               {/* Avatar for received messages */}
+//               {!isSentByUser && (
+//                 <div className="me-2">
+//                   <img
+//                     src={selectedUser?.profilePic || "/avatar.png"}
+//                     alt="Profile"
+//                     className="rounded-circle border"
+//                     style={{ width: "40px", height: "40px" }}
+//                   />
+//                 </div>
+//               )}
+
+//               {/* Message Bubble */}
+//               <div
+//                 className={`p-2 rounded-3 shadow-sm ${isSentByUser ? "justify-content-end" : "justify-content-start"}`}
+//                 style={{ maxWidth: "75%", overflowWrap: "break-word", wordBreak: "break-word" }}
+//               >
+//                 {message.image && (
+//                   <img
+//                     src={message.image}
+//                     alt="Attachment"
+//                     className="img-fluid rounded mb-2"
+//                     style={{ maxWidth: "250px", height: "auto" }}
+//                   />
+//                 )}
+//                 <p className="mb-1">{message.text}</p>
+//                 <small className="text-muted d-block text-end">{formatMessageTime(message.createdAt)}</small>
+//               </div>
+
+//               {/* Avatar for sent messages */}
+//               {isSentByUser && (
+//                 <div className="ms-2">
+//                   <img
+//                     src={authUser.profilePic || "/avatar.png"}
+//                     alt="Profile"
+//                     className="rounded-circle border"
+//                     style={{ width: "40px", height: "40px" }}
+//                   />
+//                 </div>
+//               )}
+//             </div>
+//           );
+//         })}
+//       </div>
+
+//       {/* Message Input */}
+//       <MessageInput messages={messages} />
+//     </div>
+//   );
+// };
+
+// export default ChatContainer;
 import React, { useEffect, useRef } from "react";
 import { useChatStore } from "../store/useChatStore";
 import ChatHeader from "./ChatHeader";
@@ -295,10 +486,12 @@ import MessageInput from "./MessageInput";
 import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
 
+
 const ChatContainer = () => {
   const { selectedUser, messages, getMessages, isMessageLoading, subscribeToMessages, unsubscribeFromMessages } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
 
   useEffect(() => {
     if (selectedUser?._id) {
@@ -306,13 +499,20 @@ const ChatContainer = () => {
       subscribeToMessages();
       return () => unsubscribeFromMessages();
     }
-  }, [selectedUser?._id, subscribeToMessages, unsubscribeFromMessages,messages]);
+  }, [selectedUser?._id, subscribeToMessages, unsubscribeFromMessages, messages]);
 
-  useEffect(() => {
-    if (messageEndRef.current) {
-      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
+  // useEffect(() => {
+  //   // Scroll only when new messages arrive, but not on the initial load
+  //   if (messageEndRef.current && chatContainerRef.current) {
+  //     const isAtBottom =
+  //       chatContainerRef.current.scrollHeight - chatContainerRef.current.scrollTop <=
+  //       chatContainerRef.current.clientHeight + 50; // 50px margin for smooth experience
+
+  //     if (isAtBottom) {
+  //       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+  //     }
+  //   }
+  // }, [messages]);
 
   return (
     <div className="d-flex flex-column min-vh-100 w-100 bg-white">
@@ -320,14 +520,14 @@ const ChatContainer = () => {
       <ChatHeader />
 
       {/* Messages Section */}
-      <div className="flex-grow-1 overflow-auto p-3 d-flex flex-column">
+      <div ref={chatContainerRef} className="chat-container flex-grow-1 overflow-auto p-3 d-flex flex-column">
         {messages.map((message, index) => {
           const isSentByUser = message.senderId._id === authUser._id;
 
           return (
             <div
               key={index}
-              ref={messageEndRef}
+              ref={index === messages.length - 1 ? messageEndRef : null} // Attach ref to last message
               className={`d-flex mb-3 ${isSentByUser ? "justify-content-end" : "justify-content-start"}`}
             >
               {/* Avatar for received messages */}

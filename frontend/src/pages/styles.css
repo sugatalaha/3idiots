@@ -1,0 +1,57 @@
+/* Custom scrollbar for HomePage */
+.home-container {
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+  
+.homepage-container {
+    overflow-y: auto;
+    height: 100vh;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #ccc transparent;
+  }
+  
+  .homepage-container::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .homepage-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .homepage-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+  }
+  
+  .homepage-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  /* Custom scrollbar for ChatContainer */
+  .chat-container {
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+    scrollbar-width: thin;
+    scrollbar-color: #999 transparent;
+  }
+  
+  .chat-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .chat-container::-webkit-scrollbar-track {
+    background: #eee;
+  }
+  
+  .chat-container::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 3px;
+  }
+  
+  .chat-container::-webkit-scrollbar-thumb:hover {
+    background: #444;
+  }
+  
+
+  
